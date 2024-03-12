@@ -1,0 +1,59 @@
+{
+  "spaceName": "my todo space",
+  "lists": [
+    {
+      "listName": "Todo",
+      "todos": [
+        {
+          "priority": 0,
+          "time": 0,
+          "content": "Learn - Zod Error Handling",
+          "id": "b5d70c82-c84e-4b81-9788-bacd8fbca964"
+        },
+        {
+          "priority": 0,
+          "time": 0,
+          "content": "Learn -Do you need to pass a hash string bcrpt",
+          "id": "228f7c7a-6e3b-45b7-828f-2a12898910cd"
+        },
+        {
+          "priority": 0,
+          "time": 0,
+          "content": "Learn - What are timing attacks",
+          "id": "6b8abff8-87c3-4ca7-832c-546aa565575e"
+        },
+        {
+          "priority": 0,
+          "time": 0,
+          "content": "Learn - How to acctually handle dem errors",
+          "id": "7b99ef5a-ea90-40b4-8177-cb14a699d4da"
+        },
+        {
+          "priority": 0,
+          "time": 0,
+          "content": "Create - polls crud with comments available after doing the poll\n\nserver / client ",
+          "id": "ba24eaf8-a5de-4d6f-85b6-ad06395dff84"
+        },
+        {
+          "priority": 0,
+          "time": 0,
+          "content": "Use cookie csrf prefix and create custom fetch call that auto passes csrf toke",
+          "id": "c6e6b316-5803-4776-a1ab-3155b153bfb3"
+        }
+      ],
+      "id": "cd4aed5a-ae1b-4356-966f-74f95c0bf53a"
+    },
+    {
+      "listName": "Doing",
+      "todos": [
+        {
+          "content": "",
+          "priority": 0,
+          "id": "15b0327d-29c5-49ac-b8aa-7f89cc663e77",
+          "time": 0
+        }
+      ],
+      "id": "e0a12fc4-ca9a-43e1-8031-4dfc7dd3298b"
+    }
+  ]
+}
