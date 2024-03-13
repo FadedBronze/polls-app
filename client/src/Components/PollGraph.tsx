@@ -13,12 +13,14 @@ export type GraphProps = {
 };
 
 export default function PollGraph(props: GraphProps) {
-  const mouseDownRef = useRef(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const render = useCallback(
     (ctx: CanvasRenderingContext2D) => {
       const { width, height, title, data, background } = props;
+
+      const fontSize = width/500 * props.fontSize
+      const titleSize = width/500 * props.titleSize
 
       const total = data.map<number>((data) => data[2]).reduce((last, curr) => last + curr, 0);
 
@@ -32,10 +34,10 @@ export default function PollGraph(props: GraphProps) {
       ctx.fillStyle = "white"
       ctx.textBaseline = "middle"
       ctx.textAlign = "center"
-      ctx.font = `${props.titleSize}px ${props.font}`
+      ctx.font = `${titleSize}px ${props.font}`
       ctx.fillText(title, centerX, centerY/4)
       
-      ctx.font = `${props.fontSize}px ${props.font}`
+      ctx.font = `${fontSize}px ${props.font}`
     
       let last = 0;
 
@@ -54,12 +56,6 @@ export default function PollGraph(props: GraphProps) {
         ctx.lineTo(centerX + Math.cos(last+angle) * radius, centerY + Math.sin(last+angle) * radius)
         ctx.moveTo(centerX, centerY)
         ctx.fill();
-
-        //done?
-        //contrast thing
-        //title
-
-        //losing track
 
         const textPositioning = (radius*3/4) * (1-fullness) + radius*1/4 * (fullness)
  
@@ -89,17 +85,6 @@ export default function PollGraph(props: GraphProps) {
 
     render(ctx);
   }, [render]);
-
-  useEffect(() => {
-    if (!canvasRef.current) return;
-
-    canvasRef.current.addEventListener("mousemove", (e: MouseEvent) => {
-      if (!mouseDownRef.current) return;
-    });
-
-    canvasRef.current.addEventListener("mouseup", () => (mouseDownRef.current = false));
-    canvasRef.current.addEventListener("mousedown", () => (mouseDownRef.current = true));
-  }, []);
 
   return <canvas ref={canvasRef} width={props.width} height={props.height}></canvas>;
 }

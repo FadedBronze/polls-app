@@ -47,9 +47,21 @@
       "listName": "Doing",
       "todos": [
         {
-          "content": "",
+          "content": "make the post actually post to the server\n\nvalidate the post to make sure it is properly formatte",
           "priority": 0,
           "id": "15b0327d-29c5-49ac-b8aa-7f89cc663e77",
+          "time": 0
+        },
+        {
+          "content": "actually check the password during logi",
+          "priority": 0,
+          "id": "0ff8b53f-996f-44b3-8a4a-d387405710f0",
+          "time": 0
+        },
+        {
+          "content": "user menu bar with logout and stuf",
+          "priority": 0,
+          "id": "9bd22b10-8138-49d4-b611-01f314365adc",
           "time": 0
         }
       ],

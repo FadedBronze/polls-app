@@ -1,48 +1,54 @@
-import express from "express"
-import { Kysely } from "kysely"
-import { Database } from "../../db_types"
+import express, { Response } from "express";
+import { db } from "../../server";
 
-async function userSession(req: express.Request, res: express.Response, next: express.NextFunction) {
-  const csrfToken = req.get("X-CSRF-Token")
-  
+//TODO: use try-catch
+const getUser = async (session: { id: number }) => {
+  return await db
+    .selectFrom("users")
+    .selectAll()
+    .where("session_id", "=", session.id)
+    .executeTakeFirst();
+};
+
+async function userSession(
+  req: express.Request,
+  res: Response<any, { user: Awaited<ReturnType<typeof getUser>> }>,
+  next: express.NextFunction
+) {
+  const csrfToken = req.get("X-CSRF-Token");
+
   if (csrfToken === undefined || !("sessionCode" in req.cookies)) {
-    res.status(400).json("authentication failed")
-    return 
-  } 
+    res.status(400).json("authentication failed");
+    return;
+  }
 
-  const sessionCode = req.cookies.sessionCode
+  const sessionCode = req.cookies.sessionCode;
 
-  console.log(csrfToken, sessionCode)
-
-  const db: Kysely<Database> = res.locals.db
-
-  const session = await db.selectFrom("sessions")
-  .selectAll()
-  .where("csrf_token", "=", csrfToken)
-  .executeTakeFirst()
+  const session = await db
+    .selectFrom("sessions")
+    .selectAll()
+    .where("csrf_token", "=", csrfToken)
+    .executeTakeFirst();
 
   if (
-    session === undefined || 
-    session.session_code !== sessionCode || 
+    session === undefined ||
+    session.session_code !== sessionCode ||
     session.csrf_token !== csrfToken
   ) {
-    res.status(400).json("session mismatch")
-    return
+    res.status(400).json("session mismatch");
+    return;
   }
 
-  const user = await db.selectFrom("users")
-  .selectAll()
-  .where("session_id", "=", session.id)
-  .executeTakeFirst()
+  const user = await getUser(session);
 
   if (!user) {
-    res.status(400).json("user not found")
-    return
+    res.status(400).json("user not found");
+    return;
   }
 
-  res.locals.user = user
+  res.locals.user = user;
 
-  next()
+  next();
 }
 
-export {userSession}
+export { userSession };

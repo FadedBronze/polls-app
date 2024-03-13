@@ -35,7 +35,7 @@ const dialect = new PostgresDialect({
   })
 })
 
-const db = new Kysely<Database>({
+export const db = new Kysely<Database>({
   dialect,
 })
 
@@ -48,11 +48,6 @@ app.use(cors({
 
 app.use(express.json())
 app.use(cookieParser())
-
-app.use((_, res, next) => {
-  res.locals.db = db
-  next()
-})
 
 app.use("/api/auth", authRouter)
 

@@ -1,37 +1,17 @@
-import { useState } from "react";
-import PollGraph, { GraphProps } from "./PollGraph";
+import PollGraph from "./PollGraph";
 import {
-  black,
   colorString,
   hex,
-  pastel_blue,
-  pastel_green,
-  pastel_orange,
-  pastel_violet,
 } from "../utils/color";
 import { objectKeys } from "../utils/safeKeys";
 import { useErrorModal } from "./ErrorModal";
-
-type GraphOptions = Omit<GraphProps, "data" | "width" | "height">;
-type GraphData = GraphProps["data"];
+import { usePostContext } from "./PostContext";
+import useWindowSize from "../hooks/useWindowSize";
 
 export default function PollEditor(props: { setPollEditor: (value: boolean) => void }) {
-  const [graphOptions, setGraphOptions] = useState<GraphOptions>({
-    background: black,
-    fontSize: 20,
-    titleSize: 35,
-    title: "Favorite Thing",
-    font: "sans-serif",
-  });
-
-  const [graphData, setGraphData] = useState<GraphData>([
-    ["House", pastel_orange, 1],
-    ["Bat", pastel_blue, 1],
-    ["Moose", pastel_violet, 3],
-    ["Box", pastel_green, 2],
-  ]);
-
+  const { graphData, graphOptions, setGraphData, setGraphOptions } = usePostContext();
   const { createModal } = useErrorModal();
+  const [x] = useWindowSize()
 
   return (
     <>
@@ -41,9 +21,9 @@ export default function PollEditor(props: { setPollEditor: (value: boolean) => v
           <h2>Poll Editor 3001</h2>
           <button onClick={() => props.setPollEditor(false)}>❌</button>
         </div>
-        <div className="flex flex-wrap">
+        <div className="flex flex-wrap overflow-x-hidden">
           <div className="flex-grow flex items-center justify-center bg-gray-600">
-            <PollGraph width={500} height={500} {...graphOptions} data={graphData}></PollGraph>
+            <PollGraph width={Math.min(500, x)} height={Math.min(500, x)} {...graphOptions} data={graphData}></PollGraph>
           </div>
           <div className="p-2 flex flex-col gap-2 items-baseline flex-grow">
             <button

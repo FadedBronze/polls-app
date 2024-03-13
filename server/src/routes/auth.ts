@@ -5,6 +5,7 @@ import { Kysely } from "kysely"
 import { Database } from "../db_types"
 import { HandleError } from "../utils/HandleError"
 import crypto from "crypto"
+import { db } from "../server"
 
 const authRouter = express.Router()
 
@@ -21,8 +22,6 @@ authRouter.post("/signup", async (req, res) => {
     console.error(signup.error)
     return res.status(400).json("password must be greater than 8 characters")
   }
-  
-  const db: Kysely<Database> = res.locals.db
 
   const ids = await db.selectFrom("users").select("id").where("email", "=", signup.data.email).execute()
 
@@ -59,8 +58,6 @@ authRouter.post("/login", async (req, res) => {
   if (!login.success) {
     return res.status(400).json("incorrect email or password")
   }
-
-  const db: Kysely<Database> = res.locals.db  
 
   const user = await db
   .selectFrom("users")

@@ -6,6 +6,7 @@ type ErrorData = {
 
 const ErrorContext = createContext<ErrorData>({} as ErrorData);
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useErrorModal = () => useContext(ErrorContext);
 
 export default function ErrorModal(props: { children: JSX.Element }) {
