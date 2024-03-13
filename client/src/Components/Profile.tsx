@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { AuthData } from "./AuthContext";
+import { useErrorModal } from "./ErrorModal";
+import { useNavigate } from "react-router";
 
-export default function Profile(props: Omit<AuthData, "authHeader">) {
+export default function Profile(props: AuthData) {
   const [open, setOpen] = useState(false);
+  const { createModal } = useErrorModal();
+  const redirect = useNavigate();
 
   return (
     <div className="relative">
@@ -19,9 +23,24 @@ export default function Profile(props: Omit<AuthData, "authHeader">) {
           >
             Delete Account
           </button>
-          <button onClick={() => {
-            
-          }}>Logout</button>
+          <button
+            onClick={() => {
+              fetch("/api/auth/logout", {
+                method: "DELETE",
+                headers: {
+                  ...props.authHeader,
+                },
+              })
+                .then((res) => res.json())
+                .then((data) => {
+                  createModal(data, "SUCCESS");
+                  redirect("/auth");
+                })
+                .catch((err: Error) => createModal(err.message, "ERROR"));
+            }}
+          >
+            Logout
+          </button>
         </div>
       )}
     </div>

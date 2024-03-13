@@ -12,9 +12,11 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      <PostContextProvider>
-        <App></App>
-      </PostContextProvider>
+      <AuthContextProvider>
+        <PostContextProvider>
+          <App></App>
+        </PostContextProvider>
+      </AuthContextProvider>
     ),
   },
   {
@@ -25,10 +27,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <AuthContextProvider>
-      <ErrorModal>
-        <RouterProvider router={router}></RouterProvider>
-      </ErrorModal>
-    </AuthContextProvider>
+    <ErrorModal>
+      <RouterProvider router={router}></RouterProvider>
+    </ErrorModal>
   </React.StrictMode>
 );
