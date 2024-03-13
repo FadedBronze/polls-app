@@ -8,6 +8,7 @@ import { Kysely, PostgresDialect } from "kysely"
 import { Database } from "./db_types"
 import { Pool } from "pg"
 import { userSession } from "./routes/middlewares/session"
+import { userRouter } from "./routes/user"
 dotenv.config()
 
 const env_variables = z.object({
@@ -50,6 +51,7 @@ app.use(express.json())
 app.use(cookieParser())
 
 app.use("/api/auth", authRouter)
+app.use("/api/user", userRouter)
 
 app.get("/api", userSession, (req, res) => {
   console.log(res.locals.user)

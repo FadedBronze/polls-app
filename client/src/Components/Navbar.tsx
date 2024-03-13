@@ -1,20 +1,24 @@
 import { useNavigate } from "react-router";
-import getDocumentCookie from "../utils/cookie";
+import { useAuthContext } from "./AuthContext";
+import Profile from "./Profile";
 
 export default function Navbar() {
   const redirect = useNavigate();
+  const auth = useAuthContext();
 
   return (
-    <nav className="w-full h-20 flex justify-between p-5">
-      <div className="flex gap-5">
+    <nav className="w-full h-fit flex justify-between p-5">
+      <div className="flex gap-5 items-center">
         <h2>Polls App</h2>
         <img src="#"></img>
       </div>
       <button
         onClick={() => {
+          if (!auth.authed) return;
+
           fetch("/api/", {
             headers: {
-              "X-CSRF-Token": getDocumentCookie("csrfToken") ?? "",
+              ...auth.data.authHeader,
             },
           })
             .then((res) => res.json())
@@ -23,22 +27,27 @@ export default function Navbar() {
       >
         Magical Login Powers!
       </button>
-      <div className="flex gap-5">
-        <button
-          onClick={() => {
-            redirect("/auth");
-          }}
-        >
-          Login
-        </button>
-        <button
-          onClick={() => {
-            redirect("/auth");
-          }}
-        >
-          Sign Up
-        </button>
-      </div>
+      {!auth.authed && (
+        <div className="flex gap-5">
+          <button
+            onClick={() => {
+              redirect("/auth");
+            }}
+          >
+            Login
+          </button>
+          <button
+            onClick={() => {
+              redirect("/auth");
+            }}
+          >
+            Sign Up
+          </button>
+        </div>
+      )}
+      {auth.authed && (
+        <Profile {...auth.data}></Profile> 
+      )}
     </nav>
   );
 }
