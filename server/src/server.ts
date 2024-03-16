@@ -9,6 +9,7 @@ import { Database } from "./db_types"
 import { Pool } from "pg"
 import { userSession } from "./routes/middlewares/session"
 import { userRouter } from "./routes/user"
+import { postRouter } from "./routes/post"
 dotenv.config()
 
 const env_variables = z.object({
@@ -43,7 +44,7 @@ export const db = new Kysely<Database>({
 const app = express()
 
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: "http://localhost:5174",
   credentials: true,
 }))
 
@@ -52,6 +53,7 @@ app.use(cookieParser())
 
 app.use("/api/auth", authRouter)
 app.use("/api/user", userRouter)
+app.use("/api/post", postRouter)
 
 app.get("/api", userSession, (req, res) => {
   console.log(res.locals.user)

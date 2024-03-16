@@ -13,3 +13,21 @@ CREATE TABLE users (
   session_id INT REFERENCES sessions(id),
   created DATE NOT NULL
 );
+
+CREATE TABLE polls (
+  user_id INT REFERENCES users(id) ON DELETE SET NULL,
+  id SERIAL PRIMARY KEY,
+  background VARCHAR(255) NOT NULL, 
+  title_size REAL NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  font_size REAL NOT NULL,
+  font VARCHAR(255) NOT NULL,
+  created DATE
+);
+
+CREATE TABLE choices (
+  votes int NOT NULL,
+  color VARCHAR(255) NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  poll_id INT REFERENCES polls(id) ON DELETE CASCADE
+);

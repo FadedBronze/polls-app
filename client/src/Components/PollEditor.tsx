@@ -28,19 +28,19 @@ export default function PollEditor(props: { setPollEditor: (value: boolean) => v
           <div className="p-2 flex flex-col gap-2 items-baseline flex-grow">
             <button
               onClick={() => {
-                if (graphData.some(([choiceName]) => choiceName === "new")) {
+                if (graphData.some(({name}) => name === "new")) {
                   createModal("cannot create choice with duplicate name", "ERROR");
                   return;
                 }
 
                 const newGraphData = [...graphData];
-                newGraphData.push(["new", [0, 0, 0], 1]);
+                newGraphData.push({name: "new", color: [0, 0, 0], votes: 1});
                 setGraphData(newGraphData);
               }}
             >
               Add Choice
             </button>
-            {graphData.map(([name, color, votes]) => (
+            {graphData.map(({name, color, votes}) => (
               <div key={name} className="border-t border-black w-full pt-2 flex flex-row gap-2">
                 <label
                   className="w-6 h-6 rounded-full border border-black"
@@ -55,7 +55,7 @@ export default function PollEditor(props: { setPollEditor: (value: boolean) => v
                       const value = hex(e.currentTarget.value);
 
                       const newGraphData = [...graphData];
-                      newGraphData.find(([choiceName]) => choiceName === name)![1] = value;
+                      newGraphData.find((choice) => choice.name === name)!.color = value;
                       setGraphData(newGraphData);
                     }}
                   ></input>
@@ -68,13 +68,13 @@ export default function PollEditor(props: { setPollEditor: (value: boolean) => v
 
                     const value = e.currentTarget.value;
 
-                    if (graphData.some(([choiceName]) => choiceName === value)) {
+                    if (graphData.some((choice) => choice.name === value)) {
                       createModal("cannot create choice with duplicate name", "ERROR");
                       return;
                     }
 
                     const newGraphData = [...graphData];
-                    newGraphData.find(([choiceName]) => choiceName === name)![0] = value;
+                    newGraphData.find((choice) => choice.name === name)!.name = value;
                     setGraphData(newGraphData);
                   }}
                 ></input>
@@ -87,7 +87,7 @@ export default function PollEditor(props: { setPollEditor: (value: boolean) => v
                       const value = parseFloat(e.currentTarget.value);
 
                       const newGraphData = [...graphData];
-                      newGraphData.find(([choiceName]) => choiceName === name)![2] = value;
+                      newGraphData.find((choice) => choice.name === name)!.votes = value;
                       setGraphData(newGraphData);
                     }}
                   ></input>
@@ -95,7 +95,7 @@ export default function PollEditor(props: { setPollEditor: (value: boolean) => v
 
                 <button
                   onClick={() => {
-                    setGraphData((old) => old.filter(([choiceName]) => choiceName !== name));
+                    setGraphData((old) => old.filter((choice) => choice.name !== name));
                   }}
                 >
                   ❌

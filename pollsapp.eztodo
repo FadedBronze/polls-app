@@ -33,12 +33,6 @@
           "time": 0,
           "content": "Create - polls crud with comments available after doing the poll\n\nserver / client ",
           "id": "ba24eaf8-a5de-4d6f-85b6-ad06395dff84"
-        },
-        {
-          "priority": 0,
-          "time": 0,
-          "content": "Use cookie csrf prefix and create custom fetch call that auto passes csrf toke",
-          "id": "c6e6b316-5803-4776-a1ab-3155b153bfb3"
         }
       ],
       "id": "cd4aed5a-ae1b-4356-966f-74f95c0bf53a"
@@ -47,16 +41,16 @@
       "listName": "Doing",
       "todos": [
         {
-          "content": "make the post actually post to the server\n\nvalidate the post to make sure it is properly formatte",
           "priority": 0,
-          "id": "15b0327d-29c5-49ac-b8aa-7f89cc663e77",
-          "time": 0
+          "time": 0,
+          "content": "make the post actually post to the server\n\nvalidate the post to make sure it is properly formatte",
+          "id": "15b0327d-29c5-49ac-b8aa-7f89cc663e77"
         },
         {
-          "content": "user menu bar with logout and stuf",
           "priority": 0,
-          "id": "9bd22b10-8138-49d4-b611-01f314365adc",
-          "time": 0
+          "time": 0,
+          "content": "user menu bar with logout and stuf",
+          "id": "9bd22b10-8138-49d4-b611-01f314365adc"
         }
       ],
       "id": "e0a12fc4-ca9a-43e1-8031-4dfc7dd3298b"

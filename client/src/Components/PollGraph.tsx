@@ -6,7 +6,7 @@ export type GraphProps = {
   background: Color;
   width: number;
   height: number;
-  data: [string, Color, number][];
+  data: {name: string, color: Color, votes: number}[];
   fontSize: number;
   font: string;
   titleSize: number;
@@ -22,7 +22,7 @@ export default function PollGraph(props: GraphProps) {
       const fontSize = width/500 * props.fontSize
       const titleSize = width/500 * props.titleSize
 
-      const total = data.map<number>((data) => data[2]).reduce((last, curr) => last + curr, 0);
+      const total = data.map<number>((data) => data.votes).reduce((last, curr) => last + curr, 0);
 
       ctx.fillStyle = colorString(background);
       ctx.fillRect(0, 0, width, height);
@@ -42,7 +42,7 @@ export default function PollGraph(props: GraphProps) {
       let last = 0;
 
       for (let i = 0; i < props.data.length; i++) {
-        const [text, color, votes] = props.data[i];
+        const {name: text, color, votes} = props.data[i];
 
         ctx.fillStyle = colorString(color);
 

@@ -3,19 +3,24 @@ import PollGraph from "./PollGraph";
 import { usePostContext } from "./PostContext";
 import PollEditor from "./PollEditor";
 import useMouse from "../hooks/useMouse";
+import { useAuthContext } from "./AuthContext";
+import { colorString } from "../utils/color";
 
 export default function MessageBar() {
   const { graphData, graphOptions, setGraphOptions } = usePostContext();
   const [openPoll, setOpenPoll] = useState(false);
-  const barRef = useRef<HTMLDivElement>(null)
-  const mouse = useMouse(barRef)
+  const barRef = useRef<HTMLDivElement>(null);
+  const mouse = useMouse(barRef);
+  const auth = useAuthContext();
 
   return (
     <>
       <div ref={barRef} className="bg-white relative flex justify-between p-1">
-        {mouse.over && <div className="absolute -top-1 -translate-y-full">
-          <PollGraph {...graphOptions} data={graphData} width={300} height={300}></PollGraph>
-        </div>}
+        {mouse.over && (
+          <div className="absolute -top-1 -translate-y-full">
+            <PollGraph {...graphOptions} data={graphData} width={300} height={300}></PollGraph>
+          </div>
+        )}
         <input
           placeholder="title"
           onChange={(e) => {
@@ -31,10 +36,33 @@ export default function MessageBar() {
           >
             Edit
           </button>
-          <button className="rounded-md bg-blue-500 text-white p-2" onClick={() => {
-            console.log(graphData, graphOptions)
-          }}>Send</button>
+          <button
+            className="rounded-md bg-blue-500 text-white p-2"
+            onClick={() => {
+              if (!auth.authed) return;
+
+              fetch("/api/post/add", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  ...auth.data.authHeader,
+                },
+                body: JSON.stringify({
+                  choices: graphData.map((value) => ({...value, color: colorString(value.color)})),
+                  ...graphOptions,
+                  background: colorString(graphOptions.background),
+                }),
+              });
+            }}
+          >
+            Send
+          </button>
         </div>
+        {!auth.authed && (
+          <div className="absolute inset-0 bg-white bg-opacity-20 backdrop-blur-sm flex justify-center items-center">
+            Please make an account
+          </div>
+        )}
       </div>
       {openPoll && <PollEditor setPollEditor={setOpenPoll}></PollEditor>}
     </>
