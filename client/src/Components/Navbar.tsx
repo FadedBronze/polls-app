@@ -12,21 +12,6 @@ export default function Navbar() {
         <h2>Polls App</h2>
         <img src="#"></img>
       </div>
-      <button
-        onClick={() => {
-          if (!auth.authed) return;
-
-          fetch("/api/", {
-            headers: {
-              ...auth.data.authHeader,
-            },
-          })
-            .then((res) => res.json())
-            .then((message) => console.log(message));
-        }}
-      >
-        Magical Login Powers!
-      </button>
       {!auth.authed && (
         <div className="flex gap-5">
           <button

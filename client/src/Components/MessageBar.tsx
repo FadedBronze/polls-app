@@ -26,7 +26,7 @@ export default function MessageBar() {
         )}
         <input
           placeholder="title"
-          className="bg-transparent"
+          className="bg-transparent max-w-20"
           onChange={(e) => {
             const newOptions = { ...graphOptions };
             newOptions["title"] = e.currentTarget.value;

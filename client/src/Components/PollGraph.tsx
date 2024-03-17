@@ -44,6 +44,8 @@ export default function PollGraph(props: GraphProps) {
       for (let i = 0; i < props.data.length; i++) {
         const {name: text, color, votes} = props.data[i];
 
+        if (votes === 0) continue;
+
         ctx.fillStyle = colorString(color);
 
         const fullness = votes / total;

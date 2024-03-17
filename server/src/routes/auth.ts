@@ -43,6 +43,7 @@ authRouter.post("/signup", async (req, res) => {
         name: signup.data.name,
         password: hashedPass,
         session_id: null,
+        voted_polls: [],
       })
       .executeTakeFirst()
   );

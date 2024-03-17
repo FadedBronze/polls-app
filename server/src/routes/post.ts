@@ -1,7 +1,8 @@
 import express from "express";
 import { userSession } from "./middlewares/session";
 import { db } from "../server";
-import { z } from "zod";
+import { set, z } from "zod";
+import { sql } from "kysely";
 
 export const postRouter = express.Router();
 
@@ -12,16 +13,14 @@ type Graph = {
   font_size: number;
   font: string;
   title_size: number;
+  voted: boolean;
   authorName?: string;
   poll_id: number;
 };
 
 postRouter.get("/", userSession, async (_, res) => {
   //get polls
-  const posts = await db
-    .selectFrom("polls")
-    .selectAll()
-    .execute();
+  const posts = await db.selectFrom("polls").selectAll().execute();
 
   //get choices
   const poll_ids = posts.map((poll) => poll.id);
@@ -63,7 +62,7 @@ postRouter.get("/", userSession, async (_, res) => {
 
     const user = users.find((user) => user.id == post.user_id);
 
-    const graphData: Graph = { ...post, data, authorName: user && user.name, poll_id: post.id };
+    const graphData: Graph = { ...post, data, authorName: user && user.name, poll_id: post.id, voted: res.locals.user?.voted_polls.some((id) => id === post.id) ?? false };
 
     polls.push(graphData);
   });
@@ -123,6 +122,38 @@ postRouter.post("/add", userSession, async (req, res) => {
 
   await db.insertInto("choices").values(insertData).execute();
   res.status(200).json("success");
+});
+
+postRouter.post("/vote", userSession, async (req, res) => {
+  //setup
+  console.log(req.body)
+
+  const poll_id = z.number().safeParse(req.body.id);
+  const choice_name = z.string().safeParse(req.body.name)
+
+  if (!poll_id.success || !choice_name.success) {
+    return res.status(400).json("invalid format");
+  }
+
+  const user = res.locals.user;
+
+  if (!user) {
+    return res.status(500).json("internal server error");
+  }
+
+  //add to list of voted
+  await db.updateTable("users")
+    .where("id", "=", user.id)
+    .set({
+      voted_polls: sql`array_append(voted_polls, ${poll_id.data})`,
+    }).execute();
+  
+  //update poll
+  await db.updateTable("choices").where("poll_id", "=", poll_id.data).where("choices.name", "=", choice_name.data).set({
+    votes: sql`votes + 1`
+  }).execute();
+
+  return res.status(200).json("success")
 });
 
 postRouter.post("/delete", userSession, (req, res) => {

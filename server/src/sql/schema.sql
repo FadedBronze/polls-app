@@ -11,6 +11,7 @@ CREATE TABLE users (
   email VARCHAR(255) UNIQUE NOT NULL,
   password VARCHAR(255) NOT NULL,
   session_id INT REFERENCES sessions(id),
+  voted_polls INT[],
   created DATE NOT NULL
 );
 

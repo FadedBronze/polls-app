@@ -32,6 +32,7 @@ export interface UserTable {
   created: Date
   name: string
   session_id: number | null
+  voted_polls: number[]
 }
 
 export interface SessionTable {
