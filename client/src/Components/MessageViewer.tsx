@@ -45,14 +45,29 @@ export default function MessageViewer() {
       {graphData &&
         graphData.map((graph) => {
           return (
-            <div key={graph.poll_id} className="border-t border">
-              <p className="text-sm">Author: {graph.authorName}</p>
-              <h3 className="text-center text-lg p-3">{graph.title}</h3>
-              <button className="grid grid-cols-2 w-full">{graph.data.map((choice) => {
-                return (<div className="" style={{
-                  backgroundColor: choice.color
-                }} key={choice.name + graph.poll_id}>{choice.name}</div>)
-              })}</button>
+            <div
+              key={graph.poll_id}
+              className="border-t border bg-white backdrop-blur-md m-4 mt-6 rounded-md"
+            >
+              <div className="flex justify-between mb-2">
+                <h2 className="text-lg p-3 font-bold">{graph.title}</h2>{" "}
+                <p className="text-sm p-3 text-right">Author: {graph.authorName}</p>
+              </div>
+              <button className="grid gap-3 p-3 grid-cols-2 w-full">
+                {graph.data.map((choice) => {
+                  return (
+                    <div
+                      className="rounded-md p-4 shadow-md"
+                      style={{
+                        backgroundColor: choice.color,
+                      }}
+                      key={choice.name + graph.poll_id}
+                    >
+                      {choice.name}
+                    </div>
+                  );
+                })}
+              </button>
             </div>
           );
         })}

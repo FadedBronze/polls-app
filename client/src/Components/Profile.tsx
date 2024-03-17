@@ -12,7 +12,7 @@ export default function Profile(props: AuthData) {
     <div className="relative">
       <button onClick={() => setOpen(!open)}>{props.name}</button>
       {open && (
-        <div className="absolute p-4 rounded-md bg-white shadow-md -bottom-10 translate-y-full right-0">
+        <div className="absolute z-10 p-4 rounded-md bg-white bg-opacity-40 backdrop-blur-md shadow-md -bottom-2 translate-y-full right-0">
           <h3>Hello {props.name}</h3>
           <span>{props.email}</span>
           <span>{props.created}</span>

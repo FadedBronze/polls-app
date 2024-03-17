@@ -7,7 +7,7 @@ export default function Navbar() {
   const auth = useAuthContext();
 
   return (
-    <nav className="w-full h-fit flex justify-between p-5">
+    <nav className="w-full text-sm h-fit flex justify-between p-3 pb-0">
       <div className="flex gap-5 items-center">
         <h2>Polls App</h2>
         <img src="#"></img>
@@ -45,9 +45,7 @@ export default function Navbar() {
           </button>
         </div>
       )}
-      {auth.authed && (
-        <Profile {...auth.data}></Profile> 
-      )}
+      {auth.authed && <Profile {...auth.data}></Profile>}
     </nav>
   );
 }

@@ -15,7 +15,10 @@ export default function MessageBar() {
 
   return (
     <>
-      <div ref={barRef} className="bg-white relative flex justify-between p-1">
+      <div
+        ref={barRef}
+        className="bg-white bg-opacity-40 rounded-lg p-3 relative flex justify-between"
+      >
         {mouse.over && (
           <div className="absolute -top-1 -translate-y-full">
             <PollGraph {...graphOptions} data={graphData} width={300} height={300}></PollGraph>
@@ -23,21 +26,19 @@ export default function MessageBar() {
         )}
         <input
           placeholder="title"
+          className="bg-transparent"
           onChange={(e) => {
             const newOptions = { ...graphOptions };
             newOptions["title"] = e.currentTarget.value;
             setGraphOptions(newOptions);
           }}
         ></input>
-        <div className="flex gap-1">
-          <button
-            onClick={() => setOpenPoll(true)}
-            className="rounded-md bg-green-600 text-white p-2"
-          >
+        <div className="flex gap-2">
+          <button onClick={() => setOpenPoll(true)} className="rounded-md bg-white p-2">
             Edit
           </button>
           <button
-            className="rounded-md bg-blue-500 text-white p-2"
+            className="rounded-md bg-white p-2"
             onClick={() => {
               if (!auth.authed) return;
 
@@ -48,7 +49,10 @@ export default function MessageBar() {
                   ...auth.data.authHeader,
                 },
                 body: JSON.stringify({
-                  choices: graphData.map((value) => ({...value, color: colorString(value.color)})),
+                  choices: graphData.map((value) => ({
+                    ...value,
+                    color: colorString(value.color),
+                  })),
                   ...graphOptions,
                   background: colorString(graphOptions.background),
                 }),
