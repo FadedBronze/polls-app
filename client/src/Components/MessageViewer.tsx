@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { z } from "zod";
 import { useAuthContext } from "./AuthContext";
 import PollGraph from "./PollGraph";
@@ -22,11 +22,11 @@ type GraphData = z.infer<typeof GraphSchema>;
 export default function MessageViewer() {
   const [graphData, setGraphData] = useState<GraphData[] | undefined>();
   const auth = useAuthContext();
-  const [x, y] = useWindowSize();
+  const [x] = useWindowSize();
 
   const size = Math.min(x > 600 ? (x * 2) / 3 - 120 : x - 150, 500);
 
-  useEffect(() => {
+  const updateGraphData = useCallback(() => {
     if (!auth.authed) return;
 
     fetch("/api/post/", {
@@ -43,9 +43,12 @@ export default function MessageViewer() {
       .catch((err: Error) => {
         console.error(err);
       });
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth.authed]);
+
+  useEffect(() => {
+    updateGraphData()
+  }, [updateGraphData]);
 
   return (
     <div>
@@ -82,7 +85,7 @@ export default function MessageViewer() {
                             id: graph.poll_id,
                             name: choice.name,
                           }),
-                        });
+                        }).then(() => updateGraphData());
                       }}
                     >
                       {choice.name}
